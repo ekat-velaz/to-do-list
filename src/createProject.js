@@ -19,6 +19,4 @@ export default class Project {
         this.tasks.push(newTask)
     }
     
-    
-    
 }
