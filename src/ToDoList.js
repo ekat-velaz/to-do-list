@@ -1,5 +1,5 @@
 import { compareAsc, toDate } from 'date-fns';
-import Project from './createProject';
+import Project from './projectLogic';
 
 export default class ToDoList {
     constructor() {

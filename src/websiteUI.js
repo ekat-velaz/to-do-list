@@ -1,5 +1,6 @@
-import ToDoList from "./ToDoList";
-import Project from "./createProject";
+import ToDoList from "./toDoList";
+import Project from "./projectLogic";
+import Task from "./taskLogic";
 import inboxIcon from "./images/inbox-multiple.svg";
 import todayIcon from "./images/calendar-today.svg";
 import weekIcon from "./images/calendar-week.svg";
@@ -58,9 +59,14 @@ function createProjectUI(projectName, imageSrc) {
     projectText.classList.add('project-text');
     projectText.textContent = `${projectName}`;
 
+    const taskList = document.createElement('div');
+    taskList.classList.add('task-list');
+
     newProject.appendChild(projectIcon);
     newProject.appendChild(projectText);
     newProjectContainer.appendChild(newProject);
+    newProjectContainer.appendChild(createAddTaskBtn());
+    newProjectContainer.appendChild(taskList);
 
     if ((projectName !== 'Inbox') && (projectName !== 'Today') && (projectName !== 'This week')) {
         newProjectContainer.appendChild(createDeleteBtn());
@@ -205,4 +211,99 @@ function createEditInput(container) {
     addProjectForm.appendChild(addProjCancel);
 
     return addProjectForm;
+};
+
+function createAddTaskBtn() {
+    const addTaskIcon = new Image(20, 25);
+    addTaskIcon.classList.add('add-task-icon');
+    addTaskIcon.src = addIcon;
+
+    const addTaskBtn = document.createElement('button');
+    addTaskBtn.classList.add('add-task-btn');
+    addTaskBtn.appendChild(addTaskIcon);
+
+    addTaskIcon.addEventListener('click', (e) => {
+        // const project = toDoList.getProject(e.target.parentNode.parentNode.id);
+        const projectContainer = e.target.parentNode.parentNode;
+        projectContainer.appendChild(createTaskForm(projectContainer));
+    });
+
+    return addTaskBtn;
+};
+
+
+function createTaskForm(container) {
+    const addTaskForm = document.createElement('form');
+    addTaskForm.setAttribute('id', 'add-task-input-container');
+
+    const taskTitleInput = document.createElement('input');
+    taskTitleInput.setAttribute('id', 'task-title-input');
+
+    const taskDateInput = document.createElement('input');
+    taskDateInput.setAttribute('type', 'date');
+    taskDateInput.setAttribute('id', 'task-date-input');
+
+    const taskDescriptionInput = document.createElement('textarea');
+    taskDescriptionInput.setAttribute('rows', '4');
+    taskDescriptionInput.setAttribute('cols', '50');
+    taskDescriptionInput.setAttribute('id', 'task-description-input');
+
+    const addTaskSubmit = document.createElement('button');
+    addTaskSubmit.setAttribute('type', 'submit');
+    addTaskSubmit.setAttribute('id', 'add-proj-submit');
+    addTaskSubmit.textContent = 'Add task!';
+    addTaskSubmit.addEventListener('click', (event) => {
+        event.preventDefault();
+        const newTask = new Task(taskTitleInput.value, taskDateInput.value, taskDescriptionInput.value);
+        const project = toDoList.getProject(container.id);
+        project.addTask(newTask);
+        createTaskUI(newTask.getName(), newTask.getDate(), newTask.getDescription(), container.querySelector('.task-list'));
+        addTaskForm.remove();
+    });
+
+    const addTaskCancel = document.createElement('button');
+    addTaskCancel.setAttribute('id', 'add-proj-cancel');
+    addTaskCancel.addEventListener('click', () => {
+        // addTaskCancel.parentNode.parentNode.querySelector('.edit-proj-btn').style.visibility = 'visible';
+        addTaskCancel.parentNode.remove();
+    });
+
+    const addTaskCancelIcon = new Image (20, 20);
+    addTaskCancelIcon.setAttribute('id', 'add-proj-cancel-icon');
+    addTaskCancelIcon.src = cancelIcon;
+    addTaskCancel.appendChild(addTaskCancelIcon);
+
+    addTaskForm.appendChild(taskTitleInput);
+    addTaskForm.appendChild(taskDateInput);
+    addTaskForm.appendChild(taskDescriptionInput);
+    addTaskForm.appendChild(addTaskSubmit);
+    addTaskForm.appendChild(addTaskCancel);
+
+    return addTaskForm;
+};
+
+function createTaskUI(taskTitle, taskDate, taskDescription, container) {
+    const newTaskContainer = document.createElement('div');
+    newTaskContainer.classList.add('task-container');
+    newTaskContainer.setAttribute('id', `${taskTitle}`);
+
+    const newTaskTitle = document.createElement('div');
+    newTaskTitle.classList.add('task-title');
+    newTaskTitle.textContent = `${taskTitle}`;
+
+    const newTaskDate = document.createElement('div');
+    newTaskDate.classList.add('task-date');
+    newTaskDate.textContent = `${taskDate}`;
+
+    const newTaskDescription = document.createElement('div');
+    newTaskDescription.classList.add('task-description');
+    newTaskDescription.textContent = `${taskDescription}`;
+
+    newTaskContainer.appendChild(newTaskTitle);
+    newTaskContainer.appendChild(newTaskDate);
+    newTaskContainer.appendChild(newTaskDescription);
+    newTaskContainer.appendChild(createDeleteBtn());
+    // newTaskContainer.appendChild(createEditBtn());
+
+    container.appendChild(newTaskContainer);
 };
