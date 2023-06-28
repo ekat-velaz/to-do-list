@@ -1,3 +1,4 @@
+import ToDoList from "./ToDoList";
 import Project from "./createProject";
 import inboxIcon from "./images/inbox-multiple.svg";
 import todayIcon from "./images/calendar-today.svg";
@@ -6,6 +7,8 @@ import folderIcon from "./images/folder-outline.svg";
 import deleteIcon from "./images/trash-can-outline.svg";
 import addIcon from "./images/plus.svg";
 import cancelIcon from "./images/close.svg";
+
+export const toDoList = new ToDoList;
 
 export default function showProjects() {
     createDefaultProjects();
@@ -20,24 +23,29 @@ function addProjectToDOM(projectName) {
 }
 
 function createDefaultProjects() {
-    const inbox = new Project('Inbox');
-    createProjectUI(inbox.getName(), inboxIcon);
-
-    const today = new Project('Today');
-    createProjectUI(today.getName(), todayIcon);
-
-    const thisWeek = new Project('This week');
-    createProjectUI(thisWeek.getName(), weekIcon);
+        const inbox = new Project('Inbox');
+        toDoList.addProject(inbox);
+        createProjectUI(inbox.getName(), inboxIcon);
+    
+        const today = new Project('Today');
+        toDoList.addProject(today);
+        createProjectUI(today.getName(), todayIcon);
+    
+        const thisWeek = new Project('This week');
+        toDoList.addProject(thisWeek);
+        createProjectUI(thisWeek.getName(), weekIcon);
 };
 
 function createNewProject(projectName) {
     const newProject = new Project(`${projectName}`);
+    toDoList.addProject(newProject);
     createProjectUI(newProject.getName(), folderIcon);
 };
 
 function createProjectUI(projectName, imageSrc) {
     const newProjectContainer = document.createElement('div');
     newProjectContainer.classList.add('project-container');
+    newProjectContainer.setAttribute('id', `${projectName}`);
 
     const newProject = document.createElement('button');
     newProject.classList.add('project');
@@ -56,7 +64,7 @@ function createProjectUI(projectName, imageSrc) {
 
     if ((projectName !== 'Inbox') && (projectName !== 'Today') && (projectName !== 'This week')) {
         newProjectContainer.appendChild(createDeleteBtn());
-        // newProjectContainer.appendChild(createEditBtn());
+        newProjectContainer.appendChild(createEditBtn());
     };
 
     addProjectToDOM(newProjectContainer);
@@ -142,58 +150,59 @@ function createDeleteBtn() {
 
     deleteProjectIcon.addEventListener('click', (e) => {
         e.target.parentNode.parentNode.remove();
+        toDoList.deleteProject(e.target.parentNode.parentNode.id);
     });
 
     return projectDeleteBtn;
 };
 
+function createEditBtn() {
+    const projectEditBtn = document.createElement('button');
+    projectEditBtn.classList.add('edit-proj-btn');
+    projectEditBtn.textContent = 'Rename';
+    projectEditBtn.addEventListener('click', (e) => {
+        e.target.style.visibility = 'hidden';
+        e.target.parentNode.appendChild(createEditInput(e.target.parentNode));    
+    });
 
-//TO-Do: make a button to edit a project name
-// function createEditBtn() {
-//     const projectEditBtn = document.createElement('button');
-//     projectEditBtn.classList.add('edit-proj-btn');
-//     projectEditBtn.textContent = 'Rename';
-//     projectEditBtn.addEventListener('click', (e) => {
-//         e.target.style.visibility = 'hidden';
-//         e.target.parentNode.appendChild(createEditInput(e.target.parentNode));    
-//     });
+    return projectEditBtn;
+};
 
-//     return projectEditBtn;
-// };
+function createEditInput(container) {
+    const addProjectForm = document.createElement('form');
+    addProjectForm.setAttribute('id', 'add-proj-input-container');
 
-// function createEditInput(container) {
-//     const addProjectForm = document.createElement('form');
-//     addProjectForm.setAttribute('id', 'add-proj-input-container');
+    const addProjectInput = document.createElement('input');
+    addProjectInput.setAttribute('id', 'add-proj-input');
 
-//     const addProjectInput = document.createElement('input');
-//     addProjectInput.setAttribute('id', 'add-proj-input');
+    const addProjInputSubmit = document.createElement('btn');
+    addProjInputSubmit.setAttribute('type', 'submit');
+    addProjInputSubmit.setAttribute('id', 'add-proj-submit');
+    addProjInputSubmit.textContent = 'Submit';
+    addProjInputSubmit.addEventListener('click', (event) => {
+        event.preventDefault();
+        const project = toDoList.getProject(container.id);
+        project.setName(addProjectInput.value);
+        createProjectUI(project.getName(), folderIcon);
+        container.textContent = '';
+        console.log(toDoList);
+    });
 
-//     const addProjInputSubmit = document.createElement('btn');
-//     addProjInputSubmit.setAttribute('type', 'submit');
-//     addProjInputSubmit.setAttribute('id', 'add-proj-submit');
-//     addProjInputSubmit.textContent = 'Submit';
-//     addProjInputSubmit.addEventListener('click', (event) => {
-//         event.preventDefault();
-//         // createNewProject(addProjectInput.value);
+    const addProjCancel = document.createElement('button');
+    addProjCancel.setAttribute('id', 'add-proj-cancel');
+    addProjCancel.addEventListener('click', () => {
+        addProjCancel.parentNode.parentNode.querySelector('.edit-proj-btn').style.visibility = 'visible';
+        addProjCancel.parentNode.remove();
+    });
 
-//         container.textContent = '';
-//     });
+    const addProjCancelIcon = new Image (20, 20);
+    addProjCancelIcon.setAttribute('id', 'add-proj-cancel-icon');
+    addProjCancelIcon.src = cancelIcon;
+    addProjCancel.appendChild(addProjCancelIcon);
 
-//     const addProjCancel = document.createElement('button');
-//     addProjCancel.setAttribute('id', 'add-proj-cancel');
-//     addProjCancel.addEventListener('click', () => {
-//         addProjCancel.parentNode.parentNode.querySelector('.edit-proj-btn').style.visibility = 'visible';
-//         addProjCancel.parentNode.remove();
-//     });
+    addProjectForm.appendChild(addProjectInput);
+    addProjectForm.appendChild(addProjInputSubmit);
+    addProjectForm.appendChild(addProjCancel);
 
-//     const addProjCancelIcon = new Image (20, 20);
-//     addProjCancelIcon.setAttribute('id', 'add-proj-cancel-icon');
-//     addProjCancelIcon.src = cancelIcon;
-//     addProjCancel.appendChild(addProjCancelIcon);
-
-//     addProjectForm.appendChild(addProjectInput);
-//     addProjectForm.appendChild(addProjInputSubmit);
-//     addProjectForm.appendChild(addProjCancel);
-
-//     return addProjectForm;
-// };
+    return addProjectForm;
+};
