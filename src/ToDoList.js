@@ -18,6 +18,10 @@ export default class ToDoList {
         return this.projects.find((project) => project.getName() === projectName);
     };
 
+    contains(projectName) {
+        return this.projects.some((project) => project.getName() === projectName)
+    };
+
     addProject(newProject) {
         if (this.projects.find((project) => project.name === newProject.name))
           return
