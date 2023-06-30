@@ -3,7 +3,6 @@ export default class Task {
         this.name = name;
         this.dueDate = dueDate;
         this.description = description;
-        // this.projectName = projectName;
     };
 
     setName(name) {
@@ -29,13 +28,4 @@ export default class Task {
     getDescription() {
         return this.description;
     };
-
-    // setProjectName(projectName) {
-    //     this.projectName = projectName;
-    // };
-
-    // getProjectName() {
-    //     return this.projectName;
-    // };
-
 };

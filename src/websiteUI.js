@@ -44,6 +44,8 @@ function createDefaultProjects() {
 function createNewProject(projectName) {
     const newProject = new Project(`${projectName}`);
     toDoList.addProject(newProject);
+    toDoList.updateTodayProject();
+    toDoList.updateWeekProject();
     createProjectUI(newProject.getName(), folderIcon, projectsList);
 };
 
@@ -57,8 +59,11 @@ function createProjectUI(projectName, imageSrc, container) {
     newProject.addEventListener('click', (e) => {
         const chosenProject = toDoList.getProject(`${e.target.parentNode.parentNode.id}`);
         console.log(chosenProject);
+        toDoList.updateTodayProject();
+        toDoList.updateWeekProject();
         clearActive();
         createActiveProjectUI(chosenProject.getName());
+        
         renderTasks(chosenProject.getTasks());
         setActiveProject(newProject);
     });
@@ -241,7 +246,11 @@ function createAddTaskBtn() {
 
     addTaskIcon.addEventListener('click', (e) => {
         const projectContainer = e.target.parentNode.parentNode;
+        if (document.querySelector("#add-task-input-container")) {
+            document.querySelector("#add-task-input-container").remove();
+        };
         projectContainer.appendChild(createTaskForm(projectContainer));
+        
     });
 
     return addTaskBtn;
@@ -254,6 +263,7 @@ function createTaskForm(container) {
 
     const taskTitleInput = document.createElement('input');
     taskTitleInput.setAttribute('id', 'task-title-input');
+    taskTitleInput.required = true;
 
     const taskDateInput = document.createElement('input');
     taskDateInput.setAttribute('type', 'date');
@@ -269,11 +279,13 @@ function createTaskForm(container) {
     addTaskSubmit.setAttribute('id', 'add-proj-submit');
     addTaskSubmit.textContent = 'Add task!';
     addTaskSubmit.addEventListener('click', (event) => {
-        event.preventDefault();
+        //event.preventDefault();
         const project = toDoList.getProject(container.id);
         if (checkInput(taskTitleInput.value, project) === false) {
             const newTask = new Task(taskTitleInput.value, taskDateInput.value, taskDescriptionInput.value); 
             project.addTask(newTask);
+            toDoList.updateTodayProject();
+            toDoList.updateWeekProject();
             createTaskUI(newTask.getName(), newTask.getDate(), newTask.getDescription(), activeTasks);
             addTaskForm.remove();
         };
@@ -301,6 +313,7 @@ function createTaskForm(container) {
 };
 
 function createTaskUI(taskTitle, taskDate, taskDescription, container) {
+
     const newTaskContainer = document.createElement('div');
     newTaskContainer.classList.add('task-container');
     newTaskContainer.setAttribute('id', `${taskTitle}`);
@@ -315,14 +328,19 @@ function createTaskUI(taskTitle, taskDate, taskDescription, container) {
 
     const newTaskDescription = document.createElement('div');
     newTaskDescription.classList.add('task-description');
+    if (taskDescription === undefined) {
+        newTaskDescription.textContent = '';
+    } else {
     newTaskDescription.textContent = `${taskDescription}`;
+    };
 
     newTaskContainer.appendChild(newTaskTitle);
     newTaskContainer.appendChild(newTaskDate);
     newTaskContainer.appendChild(newTaskDescription);
+    if (activeProject.id !== 'Today' && activeProject.id !== 'This week') {
     newTaskContainer.appendChild(createTaskDeleteBtn());
     newTaskContainer.appendChild(createTaskEditBtn());
-
+    };
     container.appendChild(newTaskContainer);
 };
 
@@ -424,6 +442,8 @@ function createTaskEditForm(container) {
         chosenTask.setName(taskTitleInput.value);
         chosenTask.setDate(taskDateInput.value);
         chosenTask.setDescription(taskDescriptionInput.value);
+        toDoList.updateTodayProject();
+        toDoList.updateWeekProject();
         createTaskUI(chosenTask.getName(), chosenTask.getDate(), chosenTask.getDescription(), activeTasks);
         event.target.closest('.task-container').remove();
         
@@ -464,7 +484,9 @@ function checkInput(objectName, parentName) {
 function createActiveProjectUI(projectName) {
     activeProject.setAttribute('id', `${projectName}`);
     activeProjectName.textContent = `${projectName}`;
-    activeProject.appendChild(createAddTaskBtn());
+    if (activeProject.id !== 'Today' && activeProject.id !== 'This week') {
+        activeProject.appendChild(createAddTaskBtn());
+    };
 
     addProjectToDOM(activeProject, activeSpace );
 };
