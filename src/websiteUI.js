@@ -8,8 +8,14 @@ import folderIcon from "./images/folder-outline.svg";
 import deleteIcon from "./images/trash-can-outline.svg";
 import addIcon from "./images/plus.svg";
 import cancelIcon from "./images/close.svg";
+import todoLogo from "./images/check-outline.svg";
+import githubLogo from "./images/github.svg";
+import editIcon from "./images/pencil.svg";
+import "./style.css";
 
 export const toDoList = new ToDoList;
+
+
 const projectsList = document.getElementById('projects-list');
 const activeSpace = document.getElementById('active-space');
 const activeProject = document.querySelector('.active-project');
@@ -17,10 +23,56 @@ const activeProjectName = document.getElementById('active-project-name')
 const activeTasks = document.getElementById('active-tasks');
 
 export default function showProjects() {
+    createHeader();
+    createFooter();
     createDefaultProjects();
     
     const projectsContainer = document.getElementById('projects-container');
     projectsContainer.appendChild(addProjectUI());
+};
+
+function createHeader() {
+    const headerContainer = document.getElementById('header');
+
+    const logo = document.createElement('div');
+    logo.setAttribute('id', 'logo');
+
+    const logoName = document.createElement('div');
+    logoName.setAttribute('id', 'logo-name');
+    logoName.textContent = 'ToDo-List';
+
+    const logoPic = new Image(50, 50);
+    logoPic.src = todoLogo;
+    logoPic.setAttribute('id', 'logo-pic');
+
+    logo.appendChild(logoPic);
+    logo.appendChild(logoName);
+    
+    headerContainer.appendChild(logo);
+
+    return headerContainer;
+};
+
+function createFooter() {
+    const footerContainer = document.getElementById('footer');
+
+    const copyright = document.createElement('div');
+    copyright.textContent = `Copyright © ${new Date().getFullYear()} ekat-velaz`;
+    copyright.setAttribute('id', 'copyright');
+
+    const githubLink = document.createElement('a');
+    githubLink.setAttribute('id', 'github-link');
+    githubLink.href = "https://github.com/ekat-velaz";
+
+    const githubIcon = new Image(50,50);
+    githubIcon.setAttribute('id', 'github-icon');
+    githubIcon.src = githubLogo;
+
+    githubLink.appendChild(githubIcon);
+    footerContainer.appendChild(copyright);
+    footerContainer.appendChild(githubLink);
+
+    return footerContainer;
 };
 
 function addProjectToDOM(projectName, container) {
@@ -54,10 +106,13 @@ function createProjectUI(projectName, imageSrc, container) {
     newProjectContainer.classList.add('project-container');
     newProjectContainer.setAttribute('id', `${projectName}`);
 
+    const stylingProjContainer = document.createElement('div');
+    stylingProjContainer.classList.add('styling-proj-container');
+
     const newProject = document.createElement('button');
     newProject.classList.add('project');
     newProject.addEventListener('click', (e) => {
-        const chosenProject = toDoList.getProject(`${e.target.parentNode.parentNode.id}`);
+        const chosenProject = toDoList.getProject(`${e.target.closest('.project-container').id}`);
         console.log(chosenProject);
         toDoList.updateTodayProject();
         toDoList.updateWeekProject();
@@ -65,10 +120,10 @@ function createProjectUI(projectName, imageSrc, container) {
         createActiveProjectUI(chosenProject.getName());
         
         renderTasks(chosenProject.getTasks());
-        setActiveProject(newProject);
+        setActiveProject(newProject, stylingProjContainer);
     });
 
-    const projectIcon = new Image(50, 50);
+    const projectIcon = new Image(30, 30);
     projectIcon.classList.add('project-icon');
     projectIcon.src = imageSrc;
 
@@ -76,17 +131,24 @@ function createProjectUI(projectName, imageSrc, container) {
     projectText.classList.add('project-text');
     projectText.textContent = `${projectName}`;
 
+    const projBtnContainer = document.createElement('div');
+    projBtnContainer.classList.add('proj-btn-container');
+
     newProject.appendChild(projectIcon);
     newProject.appendChild(projectText);
-    newProjectContainer.appendChild(newProject);
+    stylingProjContainer.appendChild(newProject);
+    stylingProjContainer.appendChild(projBtnContainer);
+
+    newProjectContainer.appendChild(stylingProjContainer);
 
     if ((projectName !== 'Inbox') && (projectName !== 'Today') && (projectName !== 'This week')) {
-        newProjectContainer.appendChild(createDeleteBtn());
-        newProjectContainer.appendChild(createEditBtn());
+        projBtnContainer.appendChild(createDeleteBtn());
+        projBtnContainer.appendChild(createEditBtn());
     };
 
     if (projectName === 'Inbox') {
-        newProject.classList.add('active');
+        setActiveProject(newProject, stylingProjContainer);
+        createActiveProjectUI(toDoList.getProject('Inbox').getName());
     };
 
     addProjectToDOM(newProjectContainer, projectsList);
@@ -113,8 +175,9 @@ function createAddProjBtn(container) {
     addProjText.setAttribute('id', 'add-proj-text');
     addProjText.textContent = 'Add new project!';
 
-    addProjectBtn.appendChild(addProjIcon);
     addProjectBtn.appendChild(addProjText);
+    addProjectBtn.appendChild(addProjIcon);
+    
 
     addProjectBtn.addEventListener('click', () => {
         container.textContent = '';
@@ -131,10 +194,13 @@ function createInput(container) {
     const addProjectInput = document.createElement('input');
     addProjectInput.setAttribute('id', 'add-proj-input');
 
+    const inputBtnContainer = document.createElement('div');
+    inputBtnContainer.setAttribute('id', 'input-btn-container');
+
     const addProjInputSubmit = document.createElement('btn');
     addProjInputSubmit.setAttribute('type', 'submit');
     addProjInputSubmit.setAttribute('id', 'add-proj-submit');
-    addProjInputSubmit.textContent = 'Submit';
+    addProjInputSubmit.textContent = 'Add';
     addProjInputSubmit.addEventListener('click', (event) => {
         event.preventDefault();
         if (checkInput(addProjectInput.value, toDoList) === false) {
@@ -151,14 +217,16 @@ function createInput(container) {
         container.appendChild(createAddProjBtn(container));
     });
 
-    const addProjCancelIcon = new Image (20, 20);
+    const addProjCancelIcon = new Image (23, 23);
     addProjCancelIcon.setAttribute('id', 'add-proj-cancel-icon');
     addProjCancelIcon.src = cancelIcon;
     addProjCancel.appendChild(addProjCancelIcon);
 
+    inputBtnContainer.appendChild(addProjInputSubmit);
+    inputBtnContainer.appendChild(addProjCancel);
+
     addProjectForm.appendChild(addProjectInput);
-    addProjectForm.appendChild(addProjInputSubmit);
-    addProjectForm.appendChild(addProjCancel);
+    addProjectForm.appendChild(inputBtnContainer);
 
     return addProjectForm;
 };
@@ -173,8 +241,9 @@ function createDeleteBtn() {
     projectDeleteBtn.appendChild(deleteProjectIcon);
 
     deleteProjectIcon.addEventListener('click', (e) => {
-        e.target.parentNode.parentNode.remove();
-        toDoList.deleteProject(e.target.parentNode.parentNode.id);
+        const chosenContainer = e.target.closest('.project-container');
+        chosenContainer.remove();
+        toDoList.deleteProject(chosenContainer.id);
         clearActive();
     });
 
@@ -184,10 +253,17 @@ function createDeleteBtn() {
 function createEditBtn() {
     const projectEditBtn = document.createElement('button');
     projectEditBtn.classList.add('edit-proj-btn');
-    projectEditBtn.textContent = 'Rename';
-    projectEditBtn.addEventListener('click', (e) => {
+
+    const editProjIcon = new Image(20, 25);
+    editProjIcon.classList.add('edit-icon');
+    editProjIcon.src = editIcon;
+
+    projectEditBtn.appendChild(editProjIcon);
+
+    editProjIcon.addEventListener('click', (e) => {
         e.target.style.visibility = 'hidden';
-        e.target.parentNode.appendChild(createEditInput(e.target.parentNode));    
+        // e.target.parentNode.parentNode.appendChild(createEditInput(e.target.parentNode.parentNode));    
+        e.target.closest('.project-container').appendChild(createEditInput(e.target.closest('.project-container')));
     });
 
     return projectEditBtn;
@@ -200,10 +276,13 @@ function createEditInput(container) {
     const addProjectInput = document.createElement('input');
     addProjectInput.setAttribute('id', 'add-proj-input');
 
+    const inputBtnContainer = document.createElement('div');
+    inputBtnContainer.setAttribute('id', 'input-btn-container');
+
     const addProjInputSubmit = document.createElement('btn');
     addProjInputSubmit.setAttribute('type', 'submit');
     addProjInputSubmit.setAttribute('id', 'add-proj-submit');
-    addProjInputSubmit.textContent = 'Submit';
+    addProjInputSubmit.textContent = 'Change name';
     addProjInputSubmit.addEventListener('click', (event) => {
         event.preventDefault();
         let chosenProject = toDoList.getProject(container.id);
@@ -212,31 +291,35 @@ function createEditInput(container) {
         clearActive();
         createActiveProjectUI(chosenProject.getName());
         renderTasks(chosenProject.getTasks());
-        container.textContent = '';
+        container.remove();
         console.log(toDoList);
     });
 
     const addProjCancel = document.createElement('button');
     addProjCancel.setAttribute('id', 'add-proj-cancel');
-    addProjCancel.addEventListener('click', () => {
-        addProjCancel.parentNode.parentNode.querySelector('.edit-proj-btn').style.visibility = 'visible';
-        addProjCancel.parentNode.remove();
-    });
+   
 
     const addProjCancelIcon = new Image (20, 20);
     addProjCancelIcon.setAttribute('id', 'add-proj-cancel-icon');
     addProjCancelIcon.src = cancelIcon;
+    addProjCancelIcon.addEventListener('click', (e) => {
+        e.target.closest('.project-container').querySelector('.edit-icon').style.visibility = 'visible';
+        addProjectForm.remove();
+    });
+
     addProjCancel.appendChild(addProjCancelIcon);
 
+    inputBtnContainer.appendChild(addProjInputSubmit);
+    inputBtnContainer.appendChild(addProjCancel);
+
     addProjectForm.appendChild(addProjectInput);
-    addProjectForm.appendChild(addProjInputSubmit);
-    addProjectForm.appendChild(addProjCancel);
+    addProjectForm.appendChild(inputBtnContainer);
 
     return addProjectForm;
 };
 
 function createAddTaskBtn() {
-    const addTaskIcon = new Image(20, 25);
+    const addTaskIcon = new Image(50, 50);
     addTaskIcon.classList.add('add-task-icon');
     addTaskIcon.src = addIcon;
 
@@ -264,6 +347,7 @@ function createTaskForm(container) {
     const taskTitleInput = document.createElement('input');
     taskTitleInput.setAttribute('id', 'task-title-input');
     taskTitleInput.required = true;
+    taskTitleInput.placeholder = 'Task title';
 
     const taskDateInput = document.createElement('input');
     taskDateInput.setAttribute('type', 'date');
@@ -273,10 +357,11 @@ function createTaskForm(container) {
     taskDescriptionInput.setAttribute('rows', '4');
     taskDescriptionInput.setAttribute('cols', '50');
     taskDescriptionInput.setAttribute('id', 'task-description-input');
+    taskDescriptionInput.placeholder = 'Any notes?';
 
     const addTaskSubmit = document.createElement('button');
     addTaskSubmit.setAttribute('type', 'submit');
-    addTaskSubmit.setAttribute('id', 'add-proj-submit');
+    addTaskSubmit.setAttribute('id', 'add-task-submit');
     addTaskSubmit.textContent = 'Add task!';
     addTaskSubmit.addEventListener('click', (event) => {
         //event.preventDefault();
@@ -303,11 +388,11 @@ function createTaskForm(container) {
     addTaskCancelIcon.src = cancelIcon;
     addTaskCancel.appendChild(addTaskCancelIcon);
 
+    addTaskForm.appendChild(addTaskCancel);
     addTaskForm.appendChild(taskTitleInput);
     addTaskForm.appendChild(taskDateInput);
     addTaskForm.appendChild(taskDescriptionInput);
     addTaskForm.appendChild(addTaskSubmit);
-    addTaskForm.appendChild(addTaskCancel);
 
     return addTaskForm;
 };
@@ -353,7 +438,7 @@ function renderTasks(project) {
     });
 };
 
-function setActiveProject(project) {
+function setActiveProject(project, container) {
     const projects = document.querySelectorAll('.project');
     projects.forEach((project) => {
         if (project !== this) {
@@ -361,6 +446,15 @@ function setActiveProject(project) {
         }
     });
     project.classList.add('active');
+
+    const containers = document.querySelectorAll('.styling-proj-container');
+    containers.forEach((container) => {
+        if (container !== this) {
+            container.classList.remove('active-container');
+        }
+    });
+    container.classList.add('active-container');
+
 };
 
 function clearActive() {
@@ -421,6 +515,7 @@ function createTaskEditForm(container) {
     const taskTitleInput = document.createElement('input');
     taskTitleInput.setAttribute('id', 'task-title-input');
     taskTitleInput.value = oldTitle;
+    taskTitleInput.placeholder = 'Task title';
 
     const taskDateInput = document.createElement('input');
     taskDateInput.setAttribute('type', 'date');
@@ -432,10 +527,11 @@ function createTaskEditForm(container) {
     taskDescriptionInput.setAttribute('cols', '50');
     taskDescriptionInput.setAttribute('id', 'task-description-input');
     taskDescriptionInput.value = oldDescr;
+    taskDescriptionInput.placeholder = 'Any notes?';
 
     const addTaskSubmit = document.createElement('button');
     addTaskSubmit.setAttribute('type', 'submit');
-    addTaskSubmit.setAttribute('id', 'add-proj-submit');
+    addTaskSubmit.setAttribute('id', 'add-task-submit');
     addTaskSubmit.textContent = 'Edit task!';
     addTaskSubmit.addEventListener('click', (event) => {
         event.preventDefault();
@@ -461,11 +557,12 @@ function createTaskEditForm(container) {
     addTaskCancelIcon.src = cancelIcon;
     addTaskCancel.appendChild(addTaskCancelIcon);
 
+    addTaskForm.appendChild(addTaskCancel);
     addTaskForm.appendChild(taskTitleInput);
     addTaskForm.appendChild(taskDateInput);
     addTaskForm.appendChild(taskDescriptionInput);
     addTaskForm.appendChild(addTaskSubmit);
-    addTaskForm.appendChild(addTaskCancel);
+    
 
     return addTaskForm;
 };

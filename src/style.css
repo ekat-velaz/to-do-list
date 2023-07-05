@@ -1,0 +1,315 @@
+/* Reset */
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+button, input[type="submit"], input[type="reset"] {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+
+/* General space styling */
+/* @font-face {
+    font-family: "Oswald" ;
+    src: url(/src/Oswald/Oswald-VariableFont_wght.ttf);
+} */
+
+:root {
+    --purple: #B799FF;
+    --lighterPurple: #ACBCFF;
+    --blue: #AEE2FF;
+    --lighterBlue: #E6FFFD;
+	--transparentPurple:#b899ffb5;
+	--transparentDarkerBlue:  #acbdffba;
+	--transparentBlue:#aee3ffbe ;
+	--transparentLighterBlue: #e6fffdc7;
+    /* font-family: "Oswald"; */
+}
+
+body {
+	height: 100vh;
+	background-color: var(--blue);
+}
+
+#main {
+	height: 100%;
+	display: grid;
+	grid-template-rows: 1.5fr 7fr 1fr;
+}
+
+/* Header styling */
+#header {
+	background-color: var(--purple);
+	display: grid;
+	grid-auto-flow: column;
+	place-items: center;
+	gap: 20px;
+	/* padding: 30px; */
+}
+
+#logo {
+	display: grid;
+	grid-auto-flow: column;
+	place-items: center;
+	gap: 20px;
+}
+
+#logo-name {
+	color: var(--lighterBlue);
+	font-size: 32px;
+}
+
+/* Footer styling */
+#footer {
+	background-color: var(--purple);
+	display: grid;
+	grid-auto-flow: column;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+	/* padding: 10px; */
+	color: var(--lighterBlue);
+}
+
+/* Change svg color */
+
+/* .project-icon,
+#add-proj-icon,
+#add-proj-cancel-icon,
+.del-proj-icon,
+.add-task-icon {
+    filter: invert(83%) sepia(21%) saturate(798%) hue-rotate(175deg) brightness(101%) contrast(102%);
+} */
+
+.project-icon,
+#add-proj-icon,
+#add-proj-cancel-icon,
+.del-proj-icon,
+.add-task-icon,
+#logo-pic,
+#github-icon,
+.edit-icon {
+    filter: invert(100%) sepia(99%) saturate(295%) hue-rotate(104deg) brightness(107%) contrast(105%);
+}
+
+/* Content styling */
+
+#content {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 5fr;
+    font-size: 18px;
+   
+}
+
+#projects-container {
+    background-color: var(--lighterPurple);
+    display: grid;
+    color: var(--lighterBlue);
+    padding:10px;
+    gap: 10px;
+    align-content: start;
+}
+
+#projects-list {
+    display: grid;
+    gap: 5px;
+    align-content: start;
+}
+
+.project-container {
+
+}
+
+.styling-proj-container {
+    display: grid;
+    gap: 5px;
+    padding: 10px;
+    grid-auto-flow: column; 
+    justify-content: space-between;
+    border-radius: 3px;
+}
+
+.project {
+    
+    display: grid;
+    grid-auto-flow: column;
+    place-items: center;
+    justify-content: start;
+    gap: 5px;
+    /* padding: 3px 10px 3px 10px; */
+}
+
+.proj-btn-container {
+    
+    display: grid;
+    justify-content: end;
+    grid-auto-flow: column;
+    gap: 5px;
+}
+
+.active-container,
+.add-project-btn:hover,
+.project-container:hover, 
+.add-task-btn:hover {
+    background-color: var(--purple);
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.add-project-btn {
+    display: grid;
+    padding: 10px;
+    grid-auto-flow: column; 
+    justify-content: space-between;
+}
+
+#add-proj-input-container {
+    background-color: var(--purple);
+    padding: 10px;
+    display: grid;
+    gap: 10px;
+}
+
+#input-btn-container {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 10px;
+    justify-self: end;
+}
+
+#add-proj-submit {
+    background-color: var(--lighterBlue);
+    color: var(--purple);
+    padding: 3px;
+    border-radius: 3px;
+}
+
+input {
+    border: none;
+    border-radius: 3px;
+    height: 20px;
+    background-color: var(--lighterBlue);
+    padding-left: 5px;
+}
+ textarea {
+    background-color: var(--lighterBlue);
+    border: none;
+    border-radius: 3px;
+    padding-left: 5px;
+ }
+
+
+/* Active space styling */
+
+#active-space {
+    padding: 20px;
+    display: grid;
+    
+    align-content: start;
+    color: var(--purple);
+}
+
+#active-project-name {
+    font-size: 36px;
+    color: var(--lighterBlue);
+    background-color: var(--lighterPurple);
+    padding: 10px 20px 10px 30px;
+    border-radius: 3px;
+}
+
+.add-task-btn {
+    justify-self: center;
+}
+
+.active-project {
+    display: grid;
+    gap:5px;
+}
+
+#active-tasks {
+
+}
+
+#add-task-input-container {
+    place-self: center;
+    display: grid;
+    place-content: center;
+    gap: 5px;
+    background-color: var(--purple);
+    padding: 10px;
+    padding-bottom: 25px;
+    border-radius: 3px;
+    width:450px;
+    height: fit-content;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    z-index: 1000;
+}
+
+#add-proj-cancel {
+    justify-self: end;
+}
+
+#add-task-submit {
+    background-color: var(--lighterBlue);
+    color: var(--purple);
+    padding: 10px;
+    border-radius: 3px;
+    justify-self: end;
+}
