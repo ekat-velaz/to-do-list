@@ -60,10 +60,10 @@ button, input[type="submit"], input[type="reset"] {
 }
 
 /* General space styling */
-/* @font-face {
-    font-family: "Oswald" ;
-    src: url(/src/Oswald/Oswald-VariableFont_wght.ttf);
-} */
+@font-face {
+    font-family: "Caprasimo" ;
+    src: url(/src/Caprasimo/Caprasimo-Regular.ttf);
+}
 
 :root {
     --purple: #B799FF;
@@ -74,7 +74,7 @@ button, input[type="submit"], input[type="reset"] {
 	--transparentDarkerBlue:  #acbdffba;
 	--transparentBlue:#aee3ffbe ;
 	--transparentLighterBlue: #e6fffdc7;
-    /* font-family: "Oswald"; */
+    font-family: "Caprasimo";
 }
 
 body {
@@ -139,7 +139,9 @@ body {
 .add-task-icon,
 #logo-pic,
 #github-icon,
-.edit-icon {
+.edit-icon,
+.del-task-icon,
+.edit-task-icon {
     filter: invert(100%) sepia(99%) saturate(295%) hue-rotate(104deg) brightness(107%) contrast(105%);
 }
 
@@ -212,7 +214,8 @@ body {
     display: grid;
     padding: 10px;
     grid-auto-flow: column; 
-    justify-content: space-between;
+    justify-content: center;
+    gap:10px;
 }
 
 #add-proj-input-container {
@@ -264,7 +267,7 @@ input {
 #active-project-name {
     font-size: 36px;
     color: var(--lighterBlue);
-    background-color: var(--lighterPurple);
+    background-color: var(--purple);
     padding: 10px 20px 10px 30px;
     border-radius: 3px;
 }
@@ -276,10 +279,6 @@ input {
 .active-project {
     display: grid;
     gap:5px;
-}
-
-#active-tasks {
-
 }
 
 #add-task-input-container {
@@ -313,3 +312,32 @@ input {
     border-radius: 3px;
     justify-self: end;
 }
+
+#active-tasks {
+    display: grid;
+    gap: 5px;
+}
+
+.task-container:hover {
+    background-color: var(--purple);
+}
+
+.task-container {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr 2fr 0.5fr;
+    gap: 10px;
+    align-items: center;
+    background-color: var(--lighterPurple);
+    color: var(--lighterBlue);
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.task-btn-container {
+    justify-self: end;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 7px;
+}
+

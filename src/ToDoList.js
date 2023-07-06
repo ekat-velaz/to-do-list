@@ -46,7 +46,7 @@ export default class ToDoList {
           const todayTasks = project.getTasksToday();
             todayTasks.forEach((task) => {
                 const taskName = `${task.getName()} (From: ${project.getName()})`;
-                this.getProject('Today').addTask(new Task(taskName, task.getDate()), task.getDescription());
+                this.getProject('Today').addTask(new Task(taskName, task.getDate(), task.getDescription()));
             });
           };
         });
@@ -62,7 +62,7 @@ export default class ToDoList {
             const weekTasks = project.getTasksThisWeek();
             weekTasks.forEach((task) => {
             const taskName = `${task.getName()} (From: ${project.getName()})`;
-            this.getProject('This week').addTask(new Task(taskName, task.getDate()), task.getDescription());
+            this.getProject('This week').addTask(new Task(taskName, task.getDate(), task.getDescription()));
             });
         });
     
@@ -71,10 +71,26 @@ export default class ToDoList {
               .getTasks()
               .sort((taskA, taskB) =>
                 compareAsc(
-                  toDate(new Date(taskA.getDateFormatted())),
-                  toDate(new Date(taskB.getDateFormatted()))
+                  toDate(new Date(taskA)),
+                  toDate(new Date(taskB))
                 )
               )
         );
       };
+
+      //TODO: make inbox collect all tasks
+      // updateInboxProjects(task, project) {
+      //   if (project.getName() !== 'Inbox') {
+      //     const inboxProject = this.getProject('Inbox');
+      //     inboxProject.addTask(new Task(task.getName(), task.getDate(), task.getDescription()));
+      //   };
+      // };
+
+      // editInboxProject(task, project) {
+      //   if (project.getName() !== 'Inbox') {
+      //     const inboxProject = this.getProject('Inbox');
+      //     inboxProject.getTask()
+      //     inboxProject.addTask(new Task(task.getName(), task.getDate(), task.getDescription()));
+      //   };
+      // };
 };

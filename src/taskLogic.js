@@ -18,7 +18,7 @@ export default class Task {
     };
 
     getDate() {
-        return this.dueDate
+        return this.dueDate;
     };
 
     setDescription(description) {
