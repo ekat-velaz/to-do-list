@@ -1,5 +1,4 @@
-import showProjects from "./websiteUI";
-import { toDoList } from "./websiteUI";
-import "./style.css";
+import showProjects from './websiteUI';
+import './style.css';
 
 showProjects();

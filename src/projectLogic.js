@@ -1,55 +1,56 @@
-import { toDate, isToday, isThisWeek, subDays } from 'date-fns'
+import {
+  toDate, isToday, isThisWeek, subDays,
+} from 'date-fns';
 
 export default class Project {
-    constructor(name) {
-        this.name = name;
-        this.tasks = [];
-    };
+  constructor(name) {
+    this.name = name;
+    this.tasks = [];
+  }
 
-    setName(name) {
-        this.name = name;
-    };
+  setName(name) {
+    this.name = name;
+  }
 
-    getName() {
-        return this.name;
-    };
+  getName() {
+    return this.name;
+  }
 
-    addTask(newTask) {
-        this.tasks.push(newTask);
-    };
+  addTask(newTask) {
+    this.tasks.push(newTask);
+  }
 
-    getTask(taskName) {
-        return this.tasks.find((task) => task.getName() === taskName);
-    };
+  getTask(taskName) {
+    return this.tasks.find((task) => task.getName() === taskName);
+  }
 
-    setTasks(tasks) {
-        this.tasks = tasks
-    };    
+  setTasks(tasks) {
+    this.tasks = tasks;
+  }
 
-    getTasks() {
-        return this.tasks;
-    };
+  getTasks() {
+    return this.tasks;
+  }
 
-    contains(taskName) {
-        return this.tasks.some((task) => task.getName() === taskName);
-      };
-    
-    deleteTask(taskName) {
-        this.tasks = this.tasks.filter((task) => task.name !== taskName);
-      };
+  contains(taskName) {
+    return this.tasks.some((task) => task.getName() === taskName);
+  }
 
-      getTasksToday() {
-        return this.tasks.filter((task) => {
-          const taskDate = new Date(task.getDate());
-          return isToday(toDate(taskDate));
-        });
-      };
-    
-      getTasksThisWeek() {
-        return this.tasks.filter((task) => {
-          const taskDate = new Date(task.getDate());
-          return isThisWeek(subDays(toDate(taskDate), 1));
-        });
-      };
-    
-};
+  deleteTask(taskName) {
+    this.tasks = this.tasks.filter((task) => task.name !== taskName);
+  }
+
+  getTasksToday() {
+    return this.tasks.filter((task) => {
+      const taskDate = new Date(task.getDate());
+      return isToday(toDate(taskDate));
+    });
+  }
+
+  getTasksThisWeek() {
+    return this.tasks.filter((task) => {
+      const taskDate = new Date(task.getDate());
+      return isThisWeek(subDays(toDate(taskDate), 1));
+    });
+  }
+}

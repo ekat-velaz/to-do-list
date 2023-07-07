@@ -1,31 +1,31 @@
 export default class Task {
-    constructor(name, dueDate, description) {
-        this.name = name;
-        this.dueDate = dueDate;
-        this.description = description;
-    };
+  constructor(name, dueDate, description) {
+    this.name = name;
+    this.dueDate = dueDate;
+    this.description = description;
+  }
 
-    setName(name) {
-        this.name = name;
-    };
+  setName(name) {
+    this.name = name;
+  }
 
-    getName() {
-        return this.name;
-    };
+  getName() {
+    return this.name;
+  }
 
-    setDate(dueDate) {
-        this.dueDate = dueDate;
-    };
+  setDate(dueDate) {
+    this.dueDate = dueDate;
+  }
 
-    getDate() {
-        return this.dueDate;
-    };
+  getDate() {
+    return this.dueDate;
+  }
 
-    setDescription(description) {
-        this.description = description;
-    };
+  setDescription(description) {
+    this.description = description;
+  }
 
-    getDescription() {
-        return this.description;
-    };
-};
+  getDescription() {
+    return this.description;
+  }
+}
