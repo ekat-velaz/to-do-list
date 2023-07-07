@@ -1,6 +1,7 @@
 import ToDoList from "./toDoList";
 import Project from "./projectLogic";
 import Task from "./taskLogic";
+import Storage from "./storage";
 import inboxIcon from "./images/inbox-multiple.svg";
 import todayIcon from "./images/calendar-today.svg";
 import weekIcon from "./images/calendar-week.svg";
@@ -13,8 +14,8 @@ import githubLogo from "./images/github.svg";
 import editIcon from "./images/pencil.svg";
 import "./style.css";
 
-export const toDoList = new ToDoList;
 
+export const toDoList = Storage.getTodoList();
 
 const projectsList = document.getElementById('projects-list');
 const activeSpace = document.getElementById('active-space');
@@ -26,9 +27,26 @@ export default function showProjects() {
     createHeader();
     createFooter();
     createDefaultProjects();
-    
+    loadProjects();
+
     const projectsContainer = document.getElementById('projects-container');
     projectsContainer.appendChild(addProjectUI());
+};
+
+function loadProjects() {
+    Storage.getTodoList().getProjects().forEach((project) => {
+      if (
+        project.name !== 'Inbox' &&
+        project.name !== 'Today' &&
+        project.name !== 'This week'
+      ) {
+        createProjectUI(project.name);
+      }
+    })
+};
+
+function loadTasks(projectName) {
+    Storage.getTodoList().getProject(projectName).getTasks().forEach((task) => createTaskUI(task.getName(), task.getDate(), task.getDescription()));
 };
 
 function createHeader() {
@@ -81,27 +99,27 @@ function addProjectToDOM(projectName, container) {
 
 function createDefaultProjects() {
         const inbox = new Project('Inbox');
-        toDoList.addProject(inbox);
-        createProjectUI(inbox.getName(), inboxIcon, projectsList);
+        Storage.addProject(inbox);
+        createProjectUI(inbox.getName());
     
         const today = new Project('Today');
-        toDoList.addProject(today);
-        createProjectUI(today.getName(), todayIcon, projectsList);
+        Storage.addProject(today);
+        createProjectUI(today.getName());
     
         const thisWeek = new Project('This week');
-        toDoList.addProject(thisWeek);
-        createProjectUI(thisWeek.getName(), weekIcon, projectsList);
+        Storage.addProject(thisWeek);
+        createProjectUI(thisWeek.getName());
 };
 
 function createNewProject(projectName) {
     const newProject = new Project(`${projectName}`);
-    toDoList.addProject(newProject);
-    toDoList.updateTodayProject();
-    toDoList.updateWeekProject();
-    createProjectUI(newProject.getName(), folderIcon, projectsList);
+    Storage.addProject(newProject);
+    Storage.updateTodayProject();
+    Storage.updateWeekProject();
+    createProjectUI(newProject.getName());
 };
 
-function createProjectUI(projectName, imageSrc, container) {
+function createProjectUI(projectName) { 
     const newProjectContainer = document.createElement('div');
     newProjectContainer.classList.add('project-container');
     newProjectContainer.setAttribute('id', `${projectName}`);
@@ -112,20 +130,18 @@ function createProjectUI(projectName, imageSrc, container) {
     const newProject = document.createElement('button');
     newProject.classList.add('project');
     newProject.addEventListener('click', (e) => {
-        const chosenProject = toDoList.getProject(`${e.target.closest('.project-container').id}`);
+        const chosenProject = Storage.getTodoList().getProject(`${e.target.closest('.project-container').id}`);
         console.log(chosenProject);
         toDoList.updateTodayProject();
         toDoList.updateWeekProject();
         clearActive();
         createActiveProjectUI(chosenProject.getName());
-        
         renderTasks(chosenProject.getTasks());
         setActiveProject(newProject, stylingProjContainer);
     });
 
     const projectIcon = new Image(30, 30);
     projectIcon.classList.add('project-icon');
-    projectIcon.src = imageSrc;
 
     const projectText = document.createElement('div');
     projectText.classList.add('project-text');
@@ -140,15 +156,20 @@ function createProjectUI(projectName, imageSrc, container) {
     stylingProjContainer.appendChild(projBtnContainer);
 
     newProjectContainer.appendChild(stylingProjContainer);
-
-    if ((projectName !== 'Inbox') && (projectName !== 'Today') && (projectName !== 'This week')) {
+    
+    if (projectName === 'Inbox') {
+        projectIcon.src = inboxIcon;
+        setActiveProject(newProject, stylingProjContainer);
+        createActiveProjectUI(Storage.getTodoList().getProject('Inbox').getName());
+        loadTasks('Inbox');
+    } else if (projectName === 'Today') {
+        projectIcon.src = todayIcon;
+    } else if (projectName === 'This week') {
+        projectIcon.src = weekIcon;
+    } else {
+        projectIcon.src = folderIcon;
         projBtnContainer.appendChild(createDeleteBtn());
         projBtnContainer.appendChild(createEditBtn());
-    };
-
-    if (projectName === 'Inbox') {
-        setActiveProject(newProject, stylingProjContainer);
-        createActiveProjectUI(toDoList.getProject('Inbox').getName());
     };
 
     addProjectToDOM(newProjectContainer, projectsList);
@@ -242,7 +263,7 @@ function createDeleteBtn() {
     deleteProjectIcon.addEventListener('click', (e) => {
         const chosenContainer = e.target.closest('.project-container');
         chosenContainer.remove();
-        toDoList.deleteProject(chosenContainer.id);
+        Storage.deleteProject(chosenContainer.id)
         clearActive();
     });
 
@@ -260,8 +281,7 @@ function createEditBtn() {
     projectEditBtn.appendChild(editProjIcon);
 
     editProjIcon.addEventListener('click', (e) => {
-        e.target.style.visibility = 'hidden';
-        // e.target.parentNode.parentNode.appendChild(createEditInput(e.target.parentNode.parentNode));    
+        e.target.style.visibility = 'hidden';   
         e.target.closest('.project-container').appendChild(createEditInput(e.target.closest('.project-container')));
     });
 
@@ -284,14 +304,14 @@ function createEditInput(container) {
     addProjInputSubmit.textContent = 'Change name';
     addProjInputSubmit.addEventListener('click', (event) => {
         event.preventDefault();
-        let chosenProject = toDoList.getProject(container.id);
+        let chosenProject = Storage.getTodoList().getProject(container.id);
         chosenProject.setName(addProjectInput.value);
-        createProjectUI(chosenProject.getName(), folderIcon);
+        createProjectUI(chosenProject.getName());
         clearActive();
         createActiveProjectUI(chosenProject.getName());
         renderTasks(chosenProject.getTasks());
         container.remove();
-        console.log(toDoList);
+        console.log(Storage.getTodoList());
     });
 
     const addProjCancel = document.createElement('button');
@@ -364,14 +384,14 @@ function createTaskForm(container) {
     addTaskSubmit.textContent = 'Add task!';
     addTaskSubmit.addEventListener('click', (event) => {
         event.preventDefault();
-        const project = toDoList.getProject(container.id);
+        const project = Storage.getTodoList().getProject(container.id);
+        console.log(project);
         if (checkInput(taskTitleInput.value, project) === false) {
             const newTask = new Task(taskTitleInput.value, taskDateInput.value, taskDescriptionInput.value); 
-            project.addTask(newTask);
-            toDoList.updateTodayProject();
-            toDoList.updateWeekProject();
-            // toDoList.updateInboxProjects(newTask, project);
-            createTaskUI(newTask.getName(), newTask.getDate(), newTask.getDescription(), activeTasks);
+            Storage.addTask(project.getName(), newTask);
+            Storage.updateTodayProject();
+            Storage.updateWeekProject();
+            createTaskUI(newTask.getName(), newTask.getDate(), newTask.getDescription());
             addTaskForm.remove();
         };
     });
@@ -379,7 +399,6 @@ function createTaskForm(container) {
     const addTaskCancel = document.createElement('button');
     addTaskCancel.setAttribute('id', 'add-proj-cancel');
     addTaskCancel.addEventListener('click', () => {
-        // addTaskCancel.parentNode.parentNode.querySelector('.edit-proj-btn').style.visibility = 'visible';
         addTaskCancel.parentNode.remove();
     });
 
@@ -397,7 +416,7 @@ function createTaskForm(container) {
     return addTaskForm;
 };
 
-function createTaskUI(taskTitle, taskDate, taskDescription, container) {
+function createTaskUI(taskTitle, taskDate, taskDescription) { 
 
     const newTaskContainer = document.createElement('div');
     newTaskContainer.classList.add('task-container');
@@ -431,7 +450,7 @@ function createTaskUI(taskTitle, taskDate, taskDescription, container) {
     btnContainer.appendChild(createTaskDeleteBtn());
     btnContainer.appendChild(createTaskEditBtn());
     };
-    container.appendChild(newTaskContainer);
+    activeTasks.appendChild(newTaskContainer);
 };
 
 function renderTasks(project) {
@@ -483,8 +502,7 @@ function createTaskDeleteBtn() {
     taskDeleteBtn.appendChild(deleteTaskIcon);
 
     deleteTaskIcon.addEventListener('click', (e) => {
-        const chosenProject = toDoList.getProject(e.target.closest('div.active-project').id);
-        chosenProject.deleteTask(e.target.closest('div.active-project').querySelector(".task-title").textContent);
+        Storage.deleteTask(e.target.closest('div.active-project').id, e.target.closest('div.active-project').querySelector(".task-title").textContent);
         e.target.closest('.task-container').remove();
     });
 
@@ -514,10 +532,7 @@ function createTaskEditForm(container, taskContainer) {
     const oldDate = taskContainer.querySelector('.task-date').textContent;
     const oldDescr = taskContainer.querySelector('.task-description').textContent;
 
-    const chosenProject = toDoList.getProject(container.id);
-    const chosenTask = chosenProject.getTask(oldTitle);
-    console.log(chosenProject);
-    console.log(chosenTask);
+    const chosenProject = Storage.getTodoList().getProject(container.id);
 
     const addTaskForm = document.createElement('form');
     addTaskForm.setAttribute('id', 'add-task-input-container');
@@ -545,11 +560,12 @@ function createTaskEditForm(container, taskContainer) {
     addTaskSubmit.textContent = 'Edit task!';
     addTaskSubmit.addEventListener('click', (event) => {
         event.preventDefault();
-        chosenTask.setName(taskTitleInput.value);
-        chosenTask.setDate(taskDateInput.value);
-        chosenTask.setDescription(taskDescriptionInput.value);
-        toDoList.updateTodayProject();
-        toDoList.updateWeekProject();
+        Storage.renameTask(chosenProject.getName(), oldTitle, taskTitleInput.value);
+        Storage.setTaskDate(chosenProject.getName(), taskTitleInput.value, taskDateInput.value);
+        Storage.setTaskDescription(chosenProject.getName(), taskTitleInput.value, taskDescriptionInput.value);
+        Storage.updateTodayProject();
+        Storage.updateWeekProject();
+        const chosenTask = Storage.getTodoList().getProject(chosenProject.getName()).getTask(taskTitleInput.value);
         createTaskUI(chosenTask.getName(), chosenTask.getDate(), chosenTask.getDescription(), activeTasks);
         event.target.closest('.task-container').remove();
         

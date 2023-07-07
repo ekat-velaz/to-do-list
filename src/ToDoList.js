@@ -77,20 +77,4 @@ export default class ToDoList {
               )
         );
       };
-
-      //TODO: make inbox collect all tasks
-      // updateInboxProjects(task, project) {
-      //   if (project.getName() !== 'Inbox') {
-      //     const inboxProject = this.getProject('Inbox');
-      //     inboxProject.addTask(new Task(task.getName(), task.getDate(), task.getDescription()));
-      //   };
-      // };
-
-      // editInboxProject(task, project) {
-      //   if (project.getName() !== 'Inbox') {
-      //     const inboxProject = this.getProject('Inbox');
-      //     inboxProject.getTask()
-      //     inboxProject.addTask(new Task(task.getName(), task.getDate(), task.getDescription()));
-      //   };
-      // };
 };
