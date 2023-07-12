@@ -5,119 +5,203 @@
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 body {
-	line-height: 1;
+  line-height: 1;
 }
-ol, ul {
-	list-style: none;
+ol,
+ul {
+  list-style: none;
 }
-blockquote, q {
-	quotes: none;
+blockquote,
+q {
+  quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
 }
 table {
-	border-collapse: collapse;
-	border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
-button, input[type="submit"], input[type="reset"] {
-	background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+button,
+input[type="submit"],
+input[type="reset"] {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 /* General space styling */
 @font-face {
-    font-family: "Caprasimo" ;
-    src: url(/src/Caprasimo/Caprasimo-Regular.ttf);
+  font-family: "Caprasimo";
+  src: url(/src/Caprasimo/Caprasimo-Regular.ttf);
 }
 
 :root {
-    --purple: #B799FF;
-    --lighterPurple: #ACBCFF;
-    --blue: #AEE2FF;
-    --lighterBlue: #E6FFFD;
-	--transparentPurple:#b899ffb5;
-	--transparentDarkerBlue:  #acbdffba;
-	--transparentBlue:#aee3ffbe ;
-	--transparentLighterBlue: #e6fffdc7;
-    font-family: "Caprasimo";
+  --purple: #b799ff;
+  --lighterPurple: #acbcff;
+  --blue: #aee2ff;
+  --lighterBlue: #e6fffd;
+  --red: rgb(213, 120, 120);
+  --transparentPurple: #b899ffb5;
+  --transparentDarkerBlue: #acbdffba;
+  --transparentBlue: #aee3ffbe;
+  --transparentLighterBlue: #e6fffdc7;
+  font-family: "Caprasimo";
 }
 
 body {
-	height: 100vh;
-	background-color: var(--blue);
+  height: 100vh;
+  background-color: var(--blue);
 }
 
 #main {
-	height: 100%;
-	display: grid;
-	grid-template-rows: 1.5fr 7fr 1fr;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1.5fr 7fr 1fr;
 }
 
 /* Header styling */
 #header {
-	background-color: var(--purple);
-	display: grid;
-	grid-auto-flow: column;
-	place-items: center;
-	gap: 20px;
+  background-color: var(--purple);
+  display: grid;
+  grid-auto-flow: column;
+  place-items: center;
+  gap: 20px;
 }
 
 #logo {
-	display: grid;
-	grid-auto-flow: column;
-	place-items: center;
-	gap: 20px;
+  display: grid;
+  grid-auto-flow: column;
+  place-items: center;
+  gap: 20px;
 }
 
 #logo-name {
-	color: var(--lighterBlue);
-	font-size: 32px;
+  color: var(--lighterBlue);
+  font-size: 32px;
 }
 
 /* Footer styling */
 #footer {
-	background-color: var(--purple);
-	display: grid;
-	grid-auto-flow: column;
-	justify-content: center;
-	align-items: center;
-	gap: 20px;
-	color: var(--lighterBlue);
+  background-color: var(--purple);
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  color: var(--lighterBlue);
 }
 
 /* Change svg color */
@@ -131,189 +215,209 @@ body {
 .edit-icon,
 .del-task-icon,
 .edit-task-icon {
-    filter: invert(100%) sepia(99%) saturate(295%) hue-rotate(104deg) brightness(107%) contrast(105%);
+  filter: invert(100%) sepia(99%) saturate(295%) hue-rotate(104deg)
+    brightness(107%) contrast(105%);
 }
 
 /* Projects space styling */
 #content {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: 1fr 5fr;
-    font-size: 18px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr 5fr;
+  font-size: 18px;
 }
 
 #projects-container {
-    background-color: var(--lighterPurple);
-    display: grid;
-    color: var(--lighterBlue);
-    padding:10px;
-    gap: 10px;
-    align-content: start;
+  background-color: var(--lighterPurple);
+  display: grid;
+  color: var(--lighterBlue);
+  padding: 10px;
+  gap: 10px;
+  align-content: start;
 }
 
 #projects-list {
-    display: grid;
-    gap: 5px;
-    align-content: start;
+  display: grid;
+  gap: 5px;
+  align-content: start;
 }
 
 .styling-proj-container {
-    display: grid;
-    gap: 5px;
-    padding: 10px;
-    grid-auto-flow: column; 
-    justify-content: space-between;
-    border-radius: 3px;
+  display: grid;
+  gap: 5px;
+  padding: 10px;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  border-radius: 3px;
 }
 
 .project {
-    display: grid;
-    grid-auto-flow: column;
-    place-items: center;
-    justify-content: start;
-    gap: 5px;
+  display: grid;
+  grid-auto-flow: column;
+  place-items: center;
+  justify-content: start;
+  gap: 5px;
 }
 
 .proj-btn-container {
-    display: grid;
-    justify-content: end;
-    grid-auto-flow: column;
-    gap: 5px;
+  display: grid;
+  justify-content: end;
+  grid-auto-flow: column;
+  gap: 5px;
 }
 
 .active-container,
 .add-project-btn:hover,
-.project-container:hover, 
+.project-container:hover,
 .add-task-btn:hover {
-    background-color: var(--purple);
-    font-weight: bold;
-    border-radius: 3px;
+  background-color: var(--purple);
+  font-weight: bold;
+  border-radius: 3px;
 }
 
 .add-project-btn {
-    display: grid;
-    padding: 10px;
-    grid-auto-flow: column; 
-    justify-content: center;
-    gap:10px;
+  display: grid;
+  padding: 10px;
+  grid-auto-flow: column;
+  justify-content: center;
+  gap: 10px;
 }
 
 #add-proj-input-container {
-    background-color: var(--purple);
-    padding: 10px;
-    display: grid;
-    gap: 10px;
+  background-color: var(--purple);
+  padding: 10px;
+  display: grid;
+  gap: 10px;
 }
 
 #input-btn-container {
-    display: grid;
-    grid-auto-flow: column;
-    gap: 10px;
-    justify-self: end;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 10px;
+  justify-self: end;
 }
 
 #add-proj-submit {
-    background-color: var(--lighterBlue);
-    color: var(--purple);
-    padding: 3px;
-    border-radius: 3px;
+  background-color: var(--lighterBlue);
+  color: var(--purple);
+  padding: 3px;
+  border-radius: 3px;
 }
 
 input {
-    border: none;
-    border-radius: 3px;
-    height: 20px;
-    background-color: var(--lighterBlue);
-    padding-left: 5px;
+  border: none;
+  border-radius: 3px;
+  height: 20px;
+  background-color: var(--lighterBlue);
+  padding-left: 5px;
 }
- textarea {
-    background-color: var(--lighterBlue);
-    border: none;
-    border-radius: 3px;
-    padding-left: 5px;
+textarea {
+  background-color: var(--lighterBlue);
+  border: none;
+  border-radius: 3px;
+  padding-left: 5px;
 }
 
 /* Active space styling */
 #active-space {
-    padding: 20px;
-    display: grid;
-    align-content: start;
-    color: var(--purple);
+  padding: 20px;
+  display: grid;
+  align-content: start;
+  color: var(--purple);
 }
 
 #active-project-name {
-    font-size: 36px;
-    color: var(--lighterBlue);
-    background-color: var(--purple);
-    padding: 10px 20px 10px 30px;
-    border-radius: 3px;
+  font-size: 36px;
+  color: var(--lighterBlue);
+  background-color: var(--purple);
+  padding: 10px 20px 10px 30px;
+  border-radius: 3px;
 }
 
 .add-task-btn {
-    justify-self: center;
+  justify-self: center;
 }
 
 .active-project {
-    display: grid;
-    gap:5px;
+  display: grid;
+  gap: 5px;
 }
 
 #add-task-input-container {
-    place-self: center;
-    display: grid;
-    place-content: center;
-    gap: 5px;
-    background-color: var(--purple);
-    padding: 10px;
-    padding-bottom: 25px;
-    border-radius: 3px;
-    width:450px;
-    height: fit-content;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    z-index: 1000;
+  place-self: center;
+  display: grid;
+  place-content: center;
+  gap: 5px;
+  background-color: var(--purple);
+  padding: 10px;
+  padding-bottom: 25px;
+  border-radius: 3px;
+  width: 450px;
+  height: fit-content;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  z-index: 1000;
 }
 
 #add-proj-cancel {
-    justify-self: end;
+  justify-self: end;
 }
 
 #add-task-submit {
-    background-color: var(--lighterBlue);
-    color: var(--purple);
-    padding: 10px;
-    border-radius: 3px;
-    justify-self: end;
+  background-color: var(--lighterBlue);
+  color: var(--purple);
+  padding: 10px;
+  border-radius: 3px;
+  justify-self: end;
 }
 
 #active-tasks {
-    display: grid;
-    gap: 5px;
+  display: grid;
+  gap: 5px;
 }
 
 .task-container:hover {
-    background-color: var(--purple);
+  background-color: var(--purple);
 }
 
 .task-container {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: 1fr 1fr 2fr 0.5fr;
-    gap: 10px;
-    align-items: center;
-    background-color: var(--lighterPurple);
-    color: var(--lighterBlue);
-    padding: 10px;
-    border-radius: 3px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr 1fr 2fr 0.5fr;
+  gap: 10px;
+  align-items: center;
+  background-color: var(--lighterPurple);
+  color: var(--lighterBlue);
+  padding: 10px;
+  border-radius: 3px;
 }
 
 .task-btn-container {
-    justify-self: end;
-    display: grid;
-    grid-auto-flow: column;
-    gap: 7px;
+  justify-self: end;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 7px;
+}
+
+.error {
+  padding: 5px;
+  background-color: var(--red);
+  color: var(--lighterBlue);
+  justify-self: center;
+}
+
+#add-task-input-container > .error {
+  width: 300px;
+}
+
+input:invalid {
+  border: var(--red) solid 2px;
+}
+
+form {
+  border: var(--lighterBlue) solid 1px;
 }
